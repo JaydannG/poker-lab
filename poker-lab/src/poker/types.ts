@@ -17,19 +17,19 @@ type PokerAction = {
     amount?: number;
 };
 
-type PlayerState = {
-    committedThisStreet: number;
+export type PlayerState = {
     position: Position;
-    folded: boolean;
     stack: number;
+    folded: boolean;
     hand: Card[];
+    committedThisStreet: number;
 };
 
-type HandState = {
-    activePlayer: Position;
+export type HandState = {
     players: PlayerState[];
+    activePlayer: Position;
+    street: Street;
     actions: PokerAction[];
     currentBet: number;
-    street: Street;
     pot: number;
 };
