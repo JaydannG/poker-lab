@@ -1,4 +1,4 @@
-type Position = "SB" | "BB" | "UTG" | "MP" | "CO" | "BTN";
+export type Position = "SB" | "BB" | "UTG" | "MP" | "CO" | "BTN";
 
 type ActionType = "fold" | "check" | "call" | "bet" | "raise";
 
@@ -11,9 +11,9 @@ type Card = {
     suit: Suit;
 };
 
-type PokerAction = {
+export type Action = {
     player: Position;
-    action: ActionType;
+    type: ActionType;
     amount?: number;
 };
 
@@ -29,7 +29,8 @@ export type HandState = {
     players: PlayerState[];
     activePlayer: Position;
     street: Street;
-    actions: PokerAction[];
+    communityCards: Card[];
+    actions: Action[];
     currentBet: number;
     pot: number;
 };

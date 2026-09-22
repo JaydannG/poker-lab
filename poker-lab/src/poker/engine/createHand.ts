@@ -50,6 +50,7 @@ export default function createHand(): HandState {
         street: "preflop",
         actions: [],
         currentBet: 1,
-        pot: 1.5
+        pot: 1.5,
+        communityCards: []
     };
 }
