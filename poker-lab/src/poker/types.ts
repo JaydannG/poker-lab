@@ -33,4 +33,5 @@ export type HandState = {
     actions: Action[];
     currentBet: number;
     pot: number;
+    winner?: Position;
 };

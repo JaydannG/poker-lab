@@ -1,23 +1,48 @@
 import { HandState, Action, Position } from "../types";
 
 export function applyAction(hand: HandState, action: Action): HandState {
+    let updatedHand = hand;
+
     if (action.type === "fold") {
-        const updatedPlayers = hand.players.map(player => {
+        const updatedPlayers = updatedHand.players.map(player => {
             if (player.position === action.player) {
                 return { ...player, folded: true};
             }
 
             return player;
-        })
+        });
 
-        return { ...hand, players: updatedPlayers, actions: [...hand.actions, action], activePlayer: getNextActivePlayer(hand) };
+        updatedHand = { ...updatedHand, players: updatedPlayers };
     }
 
-    return hand;
+    updatedHand = { ...updatedHand, actions: [...updatedHand.actions, action] };
+
+    if (isHandOver(updatedHand)) {
+        const winner = getWinner(updatedHand);
+
+        if (winner) {
+            console.log("Hand is over! Winner: " + winner);
+        } 
+
+        updatedHand = { ...updatedHand, winner: winner || undefined }; 
+
+        return updatedHand;
+    } 
+
+    const nextActivePlayer = getNextActivePlayer(updatedHand);
+
+    updatedHand = {...updatedHand, activePlayer: nextActivePlayer };
+
+    return updatedHand;
 }
 
 export function getNextActivePlayer(hand: HandState): Position {
     const currentIndex = hand.players.findIndex(player => player.position === hand.activePlayer);
+
+    if (currentIndex === -1) {
+        throw new Error("Active player not found in hand");
+    }
+
     const nextIndex = (currentIndex + 1) % hand.players.length;
 
     for (let i = 0; i < hand.players.length; i++) {

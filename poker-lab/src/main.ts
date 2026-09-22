@@ -5,7 +5,6 @@ import printHand from "./poker/printHand";
 function main() {
     let hand = createHand();
     printHand(hand);
-    print(getNextActivePlayer());
 }
 
 main();
