@@ -1,6 +1,6 @@
 export type Position = "SB" | "BB" | "UTG" | "MP" | "CO" | "BTN";
 
-type ActionType = "fold" | "check" | "call" | "bet" | "raise";
+export type ActionType = "fold" | "check" | "call" | "bet" | "raise";
 
 type Street = "preflop" | "flop" | "turn" | "river";
 

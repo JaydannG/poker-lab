@@ -15,7 +15,7 @@ export function applyAction(hand: HandState, action: Action): HandState {
         updatedHand = { ...updatedHand, players: updatedPlayers };
     }
 
-    updatedHand = { ...updatedHand, actions: [...updatedHand.actions, action] };
+    updatedHand = { ...updatedHand, actions: [...hand.actions, action] };
 
     if (isHandOver(updatedHand)) {
         const winner = getWinner(updatedHand);
