@@ -1,7 +1,7 @@
-import { getNextActivePlayer, applyAction } from "./applyAction";
-import createHand from "./createHand";
-import { Action, Position, ActionType } from "../types";
+import { Position, ActionType } from "../types";
 import { describe, it, expect } from "vitest";
+import { applyAction } from "./applyAction";
+import createHand from "./createHand";
 
 describe("applyAction", () => {
     it("Should fold the correct player", () => {

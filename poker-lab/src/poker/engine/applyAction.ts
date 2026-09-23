@@ -1,4 +1,5 @@
 import { HandState, Action, Position } from "../types";
+import { isHandOver, getWinner } from "./handResults";
 
 export function applyAction(hand: HandState, action: Action): HandState {
     let updatedHand = hand;
@@ -19,10 +20,6 @@ export function applyAction(hand: HandState, action: Action): HandState {
 
     if (isHandOver(updatedHand)) {
         const winner = getWinner(updatedHand);
-
-        if (winner) {
-            console.log("Hand is over! Winner: " + winner);
-        } 
 
         updatedHand = { ...updatedHand, winner: winner || undefined }; 
 
@@ -53,22 +50,4 @@ export function getNextActivePlayer(hand: HandState): Position {
     }
 
     throw new Error("No active players found");
-}
-
-function isHandOver(hand: HandState): boolean {
-    let numActivePlayers = hand.players.filter(player => !player.folded).length;
-    if (numActivePlayers === 1) {
-        return true;
-    }
-
-    return false;
-}
-
-function getWinner(hand: HandState): Position | null {
-    if (isHandOver(hand)) {
-        const winner = hand.players.find(player => !player.folded);
-        return winner ? winner.position : null;
-    }
-
-    return null;
 }
