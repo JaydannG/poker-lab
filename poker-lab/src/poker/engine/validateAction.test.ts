@@ -1,6 +1,5 @@
 import { validateAction } from "./validateAction";
 import { describe, it, expect } from "vitest";
-import { applyAction } from "./applyAction";
 import createHand from "./createHand";
 import { Position, ActionType } from "../types";
 
@@ -13,7 +12,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(validateAction(hand, action)).not.toThrow();
+        expect(() => validateAction(hand, action)).not.toThrow();
     });
     
     it("Should throw an error for an out of turn fold", () => {
@@ -24,7 +23,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Out of turn fold");
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Out of turn fold");
     });
 
     it("Should throw an error for a player that is already folded", () => {
@@ -41,7 +40,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Player already folded");
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Player already folded");
     });
 
     it("Should throw an error for a player that is not at the table", () => {
@@ -52,20 +51,24 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Player is not at table");
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Player is not at table");
     });
 
     it("Should throw an error if the hand is already completed", () => {
         const hand = createHand();
         
-        hand.players.forEach(player => player.folded = true);
+        hand.players.forEach(player => {
+            if (player.position != "BB") {
+                player.folded = true;
+            }
+        });
 
         let action = {
             player: "UTG" as Position,
             type: "fold" as ActionType
         }
 
-        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Hand is completed");
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Hand is completed");
     });
 
     it("Should throw an error if the action is not implemented", () => {
@@ -73,10 +76,10 @@ describe("validateAction", () => {
         
         let action = {
             player: "UTG" as Position,
-            type: "bet" as ActionType
+            type: "NOT VALID ACTION" as ActionType
         }
 
-        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Action is not implemented");
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Action is not implemented");
     });
 
     it("Should leave original hand unchanged if action is invalid", () => {
@@ -84,8 +87,10 @@ describe("validateAction", () => {
         
         let action = {
             player: "UTG" as Position,
-            type: "bet" as ActionType
+            type: "fold" as ActionType
         }
+
+        validateAction(hand, action);
 
         expect(hand).toEqual(
             {

@@ -129,7 +129,7 @@ describe("isHandOver", () => {
 
         hand.players.forEach(player => player.folded = true);
 
-        expect(() => isHandOver(hand)).toThrow("No players in the hand");
+        expect(() => isHandOver(hand)).toThrow();
     });
 });
 

@@ -2,6 +2,7 @@ import { HandState, Position } from "../types";
 
 export function isHandOver(hand: HandState): boolean {
     let numActivePlayers = hand.players.filter(player => !player.folded).length;
+
     if (numActivePlayers < 1) {
         throw new Error("No players in the hand");
     }
