@@ -216,4 +216,38 @@ describe("applyAction", () => {
 
         expect(updatedHand.winner).toEqual("MP");
     });
+
+    it("Should set activePlayer to null after hand has ended", () => {
+        const hand = createHand();
+
+        const co = hand.players.find(player => player.position === "CO");
+        const btn = hand.players.find(player => player.position === "BTN");
+        const sb = hand.players.find(player => player.position === "SB");
+        const bb = hand.players.find(player => player.position === "BB");
+
+        if (co) {
+            co.folded = true;
+        }
+
+        if (btn) {
+            btn.folded = true;
+        }
+
+        if (sb) {
+            sb.folded = true;
+        }
+
+        if (bb) {
+            bb.folded = true;
+        }
+
+        let action = {
+            player: "UTG" as Position,
+            type: "fold" as ActionType
+        }
+
+        const updatedHand = applyAction(hand, action);
+
+        expect(updatedHand.activePlayer).toEqual(null);
+    });
 });

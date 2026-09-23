@@ -27,7 +27,7 @@ export type PlayerState = {
 
 export type HandState = {
     players: PlayerState[];
-    activePlayer: Position;
+    activePlayer: Position | null;
     street: Street;
     communityCards: Card[];
     actions: Action[];

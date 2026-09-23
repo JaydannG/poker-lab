@@ -21,7 +21,7 @@ export function applyAction(hand: HandState, action: Action): HandState {
     if (isHandOver(updatedHand)) {
         const winner = getWinner(updatedHand);
 
-        updatedHand = { ...updatedHand, winner: winner || undefined }; 
+        updatedHand = { ...updatedHand, winner: winner || undefined, activePlayer: null }; 
 
         return updatedHand;
     } 
