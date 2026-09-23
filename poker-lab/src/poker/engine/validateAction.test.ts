@@ -13,7 +13,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(applyAction(hand, action)).not.toThrow();
+        expect(validateAction(hand, action)).not.toThrow();
     });
     
     it("Should throw an error for an out of turn fold", () => {
@@ -24,7 +24,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(applyAction(hand, action)).toThrow("INVALID ACTION: Out of turn fold");
+        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Out of turn fold");
     });
 
     it("Should throw an error for a player that is already folded", () => {
@@ -41,7 +41,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(applyAction(hand, action)).toThrow("INVALID ACTION: Player already folded");
+        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Player already folded");
     });
 
     it("Should throw an error for a player that is not at the table", () => {
@@ -52,7 +52,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(applyAction(hand, action)).toThrow("INVALID ACTION: Player is not at table");
+        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Player is not at table");
     });
 
     it("Should throw an error if the hand is already completed", () => {
@@ -65,7 +65,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(applyAction(hand, action)).toThrow("INVALID ACTION: Hand is completed");
+        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Hand is completed");
     });
 
     it("Should throw an error if the action is not implemented", () => {
@@ -76,7 +76,70 @@ describe("validateAction", () => {
             type: "bet" as ActionType
         }
 
-        expect(applyAction(hand, action)).toThrow("INVALID ACTION: Action is not implemented");
+        expect(validateAction(hand, action)).toThrow("INVALID ACTION: Action is not implemented");
     });
 
+    it("Should leave original hand unchanged if action is invalid", () => {
+        const hand = createHand();
+        
+        let action = {
+            player: "UTG" as Position,
+            type: "bet" as ActionType
+        }
+
+        expect(hand).toEqual(
+            {
+                activePlayer: "UTG",
+                players: [
+                    {
+                        position: "SB",
+                        committedThisStreet: 0.5,
+                        folded: false,
+                        stack: 99.5,
+                        hand: []
+                    },
+                    {
+                        position: "BB",
+                        committedThisStreet: 1,
+                        folded: false,
+                        stack: 99,
+                        hand: []
+                    },
+                    {
+                        position: "UTG",
+                        committedThisStreet: 0,
+                        folded: false,
+                        stack: 100,
+                        hand: []
+                    },
+                    {
+                        position: "MP",
+                        committedThisStreet: 0,
+                        folded: false,
+                        stack: 100,
+                        hand: []
+                    },
+                    {
+                        position: "CO",
+                        committedThisStreet: 0,
+                        folded: false,
+                        stack: 100,
+                        hand: []
+                    },
+                    {
+                        position: "BTN",
+                        committedThisStreet: 0,
+                        folded: false,
+                        stack: 100,
+                        hand: []
+                    },
+                ],
+                street: "preflop",
+                actions: [],
+                currentBet: 1,
+                pot: 1.5,
+                communityCards: []
+            }
+        );
+    });
 });
