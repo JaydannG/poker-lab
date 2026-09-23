@@ -1,7 +1,10 @@
 import { HandState, Action, Position } from "../types";
 import { isHandOver, getWinner } from "./handResults";
+import { validateAction } from "./validateAction";
 
 export function applyAction(hand: HandState, action: Action): HandState {
+    validateAction(hand, action);
+
     let updatedHand = hand;
 
     if (action.type === "fold") {
