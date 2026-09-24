@@ -15,7 +15,7 @@ describe("validateAction", () => {
         expect(() => validateAction(hand, action)).not.toThrow();
     });
     
-    it("Should throw an error for an out of turn fold", () => {
+    it("Should throw an error for an out of turn action", () => {
         const hand = createHand();
 
         let action = {
@@ -23,7 +23,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Out of turn fold");
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Out of turn action");
     });
 
     it("Should throw an error for a player that is already folded", () => {
@@ -54,7 +54,7 @@ describe("validateAction", () => {
         expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Player is not at table");
     });
 
-    it("Should throw an error if player attempts to fold when hand is already completed", () => {
+    it("Should throw an error if player attempts to act when hand is already completed", () => {
         const hand = createHand();
         
         hand.players.forEach(player => {
@@ -68,7 +68,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Cannot fold if hand is completed");
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Cannot act if hand is completed");
     });
 
     it("Should throw an error if the action is not implemented", () => {
@@ -157,33 +157,5 @@ describe("validateAction", () => {
         }
 
         expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Cannot check if there is a bet");
-    });
-
-    it("Should throw an error for an out of turn check", () => {
-        const hand = createHand();
-
-        let action = {
-            player: "MP" as Position,
-            type: "check" as ActionType
-        }
-
-        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Out of turn check");
-    });
-
-    it("Should throw an error if player attempts to check when hand is already completed", () => {
-        const hand = createHand();
-        
-        hand.players.forEach(player => {
-            if (player.position != "BB") {
-                player.folded = true;
-            }
-        });
-
-        let action = {
-            player: "UTG" as Position,
-            type: "check" as ActionType
-        }
-
-        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Cannot check if hand is completed");
     });
 });

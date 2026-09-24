@@ -34,4 +34,5 @@ export type HandState = {
     currentBet: number;
     pot: number;
     winner?: Position;
+    pendingPlayers: PlayerState[];
 };
