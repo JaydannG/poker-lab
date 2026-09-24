@@ -1,4 +1,4 @@
-import { Position, ActionType } from "../types";
+import { Position, ActionType, Action } from "../types";
 import { describe, it, expect } from "vitest";
 import { applyAction } from "./applyAction";
 import createHand from "./createHand";
@@ -53,7 +53,7 @@ describe("applyAction", () => {
         expect(foldedAction).toEqual({ player: "UTG", type: "fold" });
     });
 
-    it("Should advance to the next player", () => {
+    it("Should advance to the next player after folding", () => {
         const hand = createHand();
 
         let action = {
@@ -249,5 +249,67 @@ describe("applyAction", () => {
         const updatedHand = applyAction(hand, action);
 
         expect(updatedHand.activePlayer).toEqual(null);
+    });
+
+    it("Should not change the size of the pot if the player checks", () => {
+        const hand = createHand();
+
+        let action : Action = {
+            player: "UTG", 
+            type: "check"
+        }
+
+        hand.currentBet = 0;
+
+        const updatedHand = applyAction(hand, action);
+
+        expect(hand.pot).toEqual(1.5);
+    });
+
+    it("Should not change the size of the players stack if the player checks", () => {
+        const hand = createHand();
+
+        let action : Action = {
+            player: "UTG", 
+            type: "check"
+        }
+
+        hand.currentBet = 0;
+
+        const updatedHand = applyAction(hand, action);
+        const utg = hand.players.find(player => player.position === "UTG");
+
+        expect(utg?.stack).toEqual(100);
+    });
+
+    it("Should record the check action", () => {
+        const hand = createHand();
+
+        let action = {
+            player: "UTG" as Position,
+            type: "check" as ActionType
+        }
+
+        hand.currentBet = 0;
+
+        const updatedHand = applyAction(hand, action);
+        const checkAction = updatedHand.actions.at(0);
+
+        expect(checkAction).toEqual({ player: "UTG", type: "check" });
+    });
+
+    it("Should advance to the next player after checking", () => {
+        const hand = createHand();
+
+        let action = {
+            player: "UTG" as Position,
+            type: "check" as ActionType
+        }
+
+        hand.currentBet = 0;
+
+        const updatedHand = applyAction(hand, action);
+
+        expect(hand.activePlayer).toEqual("MP");
     });
 });

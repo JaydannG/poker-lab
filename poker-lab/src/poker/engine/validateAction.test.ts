@@ -54,7 +54,7 @@ describe("validateAction", () => {
         expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Player is not at table");
     });
 
-    it("Should throw an error if the hand is already completed", () => {
+    it("Should throw an error if player attempts to fold when hand is already completed", () => {
         const hand = createHand();
         
         hand.players.forEach(player => {
@@ -68,7 +68,7 @@ describe("validateAction", () => {
             type: "fold" as ActionType
         }
 
-        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Hand is completed");
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Cannot fold if hand is completed");
     });
 
     it("Should throw an error if the action is not implemented", () => {
@@ -146,5 +146,44 @@ describe("validateAction", () => {
                 communityCards: []
             }
         );
+    });
+
+    it("Should throw and error if a player attempts to check when there is a bet", () => {
+        const hand = createHand();
+        
+        let action = {
+            player: "UTG" as Position,
+            type: "check" as ActionType
+        }
+
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Cannot check if there is a bet");
+    });
+
+    it("Should throw an error for an out of turn check", () => {
+        const hand = createHand();
+
+        let action = {
+            player: "MP" as Position,
+            type: "check" as ActionType
+        }
+
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Out of turn check");
+    });
+
+    it("Should throw an error if player attempts to check when hand is already completed", () => {
+        const hand = createHand();
+        
+        hand.players.forEach(player => {
+            if (player.position != "BB") {
+                player.folded = true;
+            }
+        });
+
+        let action = {
+            player: "UTG" as Position,
+            type: "check" as ActionType
+        }
+
+        expect(() => validateAction(hand, action)).toThrow("INVALID ACTION: Cannot check if hand is completed");
     });
 });

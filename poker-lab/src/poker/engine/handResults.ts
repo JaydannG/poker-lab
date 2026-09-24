@@ -22,3 +22,8 @@ export function getWinner(hand: HandState): Position | null {
 
     return null;
 }
+
+export function isBettingRoundComplete(hand: HandState): boolean {
+
+    return false;
+}
